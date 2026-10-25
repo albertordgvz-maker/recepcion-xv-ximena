@@ -159,5 +159,39 @@
       scanning = false;
     }
   </script>
+
+<button id="probarConexion" onclick="probarConexion()">
+  🔗 Probar conexión
+</button>
+
+<p id="estadoConexion"></p>
+
+<script>
+async function probarConexion() {
+  const estado = document.getElementById('estadoConexion');
+  estado.textContent = 'Enviando prueba...';
+
+  const url = https://script.google.com/macros/s/AKfycbyuvNAvLg8zLrqvGUg87wPP_F3YqfLETA01WpG9LYsJ90--Ssln1qvwo3LqjYNoUNGcOA/exec;
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      body: JSON.stringify({
+        accion: 'probarConexion'
+      })
+    });
+
+    estado.textContent =
+      'Solicitud enviada. Falta verificar si llegó al servidor.';
+  } catch (error) {
+    estado.textContent =
+      'No se pudo enviar la solicitud: ' + error.message;
+  }
+}
+</script>
 </body>
 </html>
