@@ -210,9 +210,12 @@ const estadoPuente = document.getElementById('estadoPuente');
   estadoPuente.textContent = '✅ JavaScript funcionando';
 
 puente.addEventListener('load', function() {
-  estadoPuente.textContent = 'Puente cargado. Esperando señal...';
-});
+  estadoPuente.textContent = 'Puente cargado. Enviando prueba...';
 
+  puente.contentWindow.postMessage({
+    tipo: 'probarPuente'
+  }, '*');
+});
 window.addEventListener('message', function(evento) {
   if (evento.source !== puente.contentWindow) return;
 
