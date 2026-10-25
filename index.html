@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recepción XV Ximena Yoselin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4eafa;
+      text-align: center;
+      padding: 30px 15px;
+    }
+    main {
+      background: white;
+      border-radius: 20px;
+      padding: 30px 20px;
+      max-width: 420px;
+      margin: auto;
+    }
+    h1 { color: #8953a2; }
+    button {
+      background: #8953a2;
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    video {
+      width: 100%;
+      max-width: 340px;
+      margin-top: 20px;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>♛ Recepción XV Ximena Yoselin</h1>
+    <p>15 de noviembre de 2026</p>
+    <button id="start">📷 Probar cámara</button>
+    <p id="message">Presiona el botón para comenzar.</p>
+    <video id="camera" autoplay playsinline muted></video>
+  </main>
+
+  <script>
+    document.getElementById('start').onclick = async () => {
+      const message = document.getElementById('message');
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' },
+          audio: false
+        });
+        document.getElementById('camera').srcObject = stream;
+        message.textContent = 'Cámara activada correctamente.';
+      } catch (error) {
+        message.textContent = 'Error: ' + error.message;
+      }
+    };
+  </script>
+</body>
+</html>
