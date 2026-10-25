@@ -205,25 +205,36 @@ const url = 'https://script.google.com/macros/s/AKfycbyuvNAvLg8zLrqvGUg87wPP_F3Y
 <p id="estadoPuente">Esperando conexión...</p>
 
 <script>
+
+<script>
 const puente = document.getElementById('puenteAppsScript');
+const estadoPuente = document.getElementById('estadoPuente');
 
 puente.addEventListener('load', function() {
-  document.getElementById('estadoPuente').textContent =
-    'Comprobando comunicación...';
-
-  puente.contentWindow.postMessage({
-    tipo: 'probarPuente'
-  }, '*');
+  estadoPuente.textContent = 'Puente cargado. Esperando señal...';
 });
 
 window.addEventListener('message', function(evento) {
   if (evento.source !== puente.contentWindow) return;
 
-  if (evento.data && evento.data.tipo === 'puenteConectado') {
-    document.getElementById('estadoPuente').textContent =
+  const datos = evento.data || {};
+
+  if (datos.tipo === 'puenteListo') {
+    estadoPuente.textContent =
+      'Puente listo. Comprobando comunicación...';
+
+    puente.contentWindow.postMessage({
+      tipo: 'probarPuente'
+    }, '*');
+
+    return;
+  }
+
+  if (datos.tipo === 'puenteConectado') {
+    estadoPuente.textContent =
       '✅ Comunicación funcionando';
   }
 });
 </script>
-</body>
+
 </html>
