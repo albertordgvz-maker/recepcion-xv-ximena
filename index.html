@@ -209,7 +209,20 @@ const puente = document.getElementById('puenteAppsScript');
 
 puente.addEventListener('load', function() {
   document.getElementById('estadoPuente').textContent =
-    'Puente cargado. Pendiente de verificar comunicación.';
+    'Comprobando comunicación...';
+
+  puente.contentWindow.postMessage({
+    tipo: 'probarPuente'
+  }, '*');
+});
+
+window.addEventListener('message', function(evento) {
+  if (evento.source !== puente.contentWindow) return;
+
+  if (evento.data && evento.data.tipo === 'puenteConectado') {
+    document.getElementById('estadoPuente').textContent =
+      '✅ Comunicación funcionando';
+  }
 });
 </script>
 </body>
