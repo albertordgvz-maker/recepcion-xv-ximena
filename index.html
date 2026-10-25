@@ -193,5 +193,24 @@ const url = 'https://script.google.com/macros/s/AKfycbyuvNAvLg8zLrqvGUg87wPP_F3Y
   }
 }
 </script>
+
+<!-- Conexión con Google Apps Script -->
+<iframe
+  id="puenteAppsScript"
+  src="https://script.google.com/macros/s/AKfycbyuvNAvLg8zLrqvGUg87wPP_F3YqfLETA01WpG9LYsJ90--Ssln1qvwo3LqjYNoUNGcOA/exec?page=bridge"
+  style="display:none"
+  title="Conexión de recepción">
+</iframe>
+
+<p id="estadoPuente">Esperando conexión...</p>
+
+<script>
+const puente = document.getElementById('puenteAppsScript');
+
+puente.addEventListener('load', function() {
+  document.getElementById('estadoPuente').textContent =
+    'Puente cargado. Pendiente de verificar comunicación.';
+});
+</script>
 </body>
 </html>
