@@ -209,6 +209,7 @@ const url = 'https://script.google.com/macros/s/AKfycbyuvNAvLg8zLrqvGUg87wPP_F3Y
 <script>
 const puente = document.getElementById('puenteAppsScript');
 const estadoPuente = document.getElementById('estadoPuente');
+  estadoPuente.textContent = '✅ JavaScript funcionando';
 
 puente.addEventListener('load', function() {
   estadoPuente.textContent = 'Puente cargado. Esperando señal...';
