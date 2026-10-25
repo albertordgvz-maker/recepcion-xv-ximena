@@ -128,11 +128,13 @@
               return;
             }
 
-            mensaje(
-              'QR leído correctamente.\n' +
-              'Código de invitación: ' + token + '\n' +
-              'Todavía no se ha registrado ninguna entrada.'
-            );
+          mensaje('QR leído. Abriendo recepción...');
+
+const urlRecepcion =
+  'https://script.google.com/macros/s/AKfycbyuvNAvLg8zLrqvGUg87wPP_F3YqfLETA01WpG9LYsJ90--Ssln1qvwo3LqjYNoUNGcOA/exec'
+  + '?page=reception&t=' + encodeURIComponent(token);
+
+window.location.href = urlRecepcion;
           },
           () => {}
         );
