@@ -1,1 +1,163 @@
-# recepcion-xv-ximena
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recepción XV Ximena Yoselin</title>
+
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4eafa;
+      text-align: center;
+      padding: 20px 15px;
+    }
+
+    main {
+      background: white;
+      border-radius: 20px;
+      padding: 25px 18px;
+      max-width: 420px;
+      margin: auto;
+    }
+
+    h1 { color: #8953a2; }
+
+    button {
+      background: #8953a2;
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      margin: 6px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    #reader {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    #resultado {
+      background: #f4eafa;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>♛ Recepción XV</h1>
+    <h2>Ximena Yoselin</h2>
+    <p>15 de noviembre de 2026</p>
+
+    <button id="iniciar" onclick="iniciarEscaner()">
+      📷 Escanear QR
+    </button>
+
+    <button id="detener" onclick="detenerEscaner()">
+      Detener cámara
+    </button>
+
+    <div id="reader"></div>
+
+    <div id="resultado">
+      Presiona Escanear QR para comenzar.
+    </div>
+  </main>
+
+  <script>
+    let scanner = null;
+    let scanning = false;
+
+    function mensaje(texto) {
+      document.getElementById('resultado').textContent = texto;
+    }
+
+    function extraerToken(texto) {
+      try {
+        const url = new URL(texto);
+
+        if (url.protocol !== 'https:' ||
+            url.hostname !== 'script.google.com') {
+          return null;
+        }
+
+        if (url.searchParams.get('page') !== 'pass') {
+          return null;
+        }
+
+        return url.searchParams.get('t');
+      } catch (error) {
+        return null;
+      }
+    }
+
+    async function iniciarEscaner() {
+      if (scanning) return;
+
+      if (typeof Html5Qrcode === 'undefined') {
+        mensaje('No se cargó el lector QR.');
+        return;
+      }
+
+      try {
+        scanner = new Html5Qrcode('reader');
+
+        await scanner.start(
+          { facingMode: 'environment' },
+          {
+            fps: 10,
+            qrbox: { width: 230, height: 230 }
+          },
+          async (textoQR) => {
+            if (!scanning) return;
+
+            const token = extraerToken(textoQR);
+
+            await detenerEscaner();
+
+            if (!token) {
+              mensaje('Este QR no es un pase válido.');
+              return;
+            }
+
+            mensaje(
+              'QR leído correctamente.\n' +
+              'Código de invitación: ' + token + '\n' +
+              'Todavía no se ha registrado ninguna entrada.'
+            );
+          },
+          () => {}
+        );
+
+        scanning = true;
+        mensaje('Apunta la cámara al QR del invitado.');
+
+      } catch (error) {
+        mensaje('Error de cámara: ' + error.message);
+      }
+    }
+
+    async function detenerEscaner() {
+      if (!scanner) return;
+
+      try {
+        if (scanning) await scanner.stop();
+        await scanner.clear();
+      } catch (error) {
+        console.error(error);
+      }
+
+      scanner = null;
+      scanning = false;
+    }
+  </script>
+</body>
+</html>
